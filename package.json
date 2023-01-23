@@ -1,5 +1,10 @@
 {
+  "scripts": {
+    "start": "node ./bin/www",
+    "devstart": "nodemon ./bin/www"
+  },
   "dependencies": {
+    "debug": "^4.3.4",
     "express": "^4.18.2",
     "mongodb": "^4.13.0",
     "mongoose": "^6.8.4",
