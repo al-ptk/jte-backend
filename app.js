@@ -23,7 +23,7 @@ app.use('/auth', authRouter);
 app.use(function (err, req, res, next) {
   console.error(err.message);
   if (!err.statusCode) err.statusCode = 500;
-  res.state(err.statusCode).send(err.message);
+  res.status(err.statusCode).send(err.message);
 });
 
 // Export app
