@@ -7,10 +7,11 @@ route.post('/sign-in', (req, res) => {
   // Reject emails not registered
   User.findOne({ email }, (err, user) => {
     if (err) {
-      return res.sendStatus(500);
+      return next(err);
     }
 
     if (!user) {
+      // TODO add status code
       return res.send('No user registered with this email');
     }
 
@@ -29,6 +30,7 @@ route.post('/sign-up', async (req, res) => {
   // Refuse sign-up if email already registered
   const userExists = await User.findOne({ email }).exec();
   if (userExists) {
+    // TODO add status code
     return res.send('User already exists');
   }
 
@@ -43,8 +45,8 @@ route.post('/sign-up', async (req, res) => {
   try {
     await newUser.save();
     res.send('User registered!');
-  } catch {
-    res.sendStatus(500);
+  } catch (err) {
+    return next(err);
   }
 });
 

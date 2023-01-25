@@ -19,5 +19,12 @@ app.get('/', (req, res) => {
 });
 app.use('/auth', authRouter);
 
+// Set up error handler middleware
+app.use(function (err, req, res, next) {
+  console.error(err.message);
+  if (!err.statusCode) err.statusCode = 500;
+  res.state(err.statusCode).send(err.message);
+});
+
 // Export app
 module.exports = app;
