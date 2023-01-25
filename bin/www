@@ -10,6 +10,7 @@ const server = http.createServer(app);
 server.listen(port);
 server.on('on', onError);
 server.on('on', onListening);
+console.clear();
 console.log(`Connected to port ${port}`);
 
 function normalizePort(val) {
