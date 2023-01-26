@@ -1,11 +1,6 @@
 const route = require('express').Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-const SALT = 10;
-
-const error = async () => {
-  throw new Error('outside try block');
-};
 
 // Sign In Route
 route.post('/sign-in', async (req, res, next) => {
@@ -50,14 +45,11 @@ route.post('/sign-up', async (req, res, next) => {
       return res.status(401).send('User already exists');
     }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, SALT);
-
     // Create new user
     const newUser = new User({
       name,
       email,
-      password: hashedPassword,
+      password, // the hashing is done in the save pre-hook on the Schema
     });
 
     // Commit new user

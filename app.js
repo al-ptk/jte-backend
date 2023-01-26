@@ -12,12 +12,14 @@ app.use(express.json());
 
 // Import routers
 const authRouter = require('./routes/authRouter');
+const projectsRouter = require('./routes/projectsRouter');
 
 // Set up routes
 app.get('/', (req, res) => {
   res.send('We doing it live');
 });
 app.use('/auth', authRouter);
+app.use(projectsRouter);
 
 // Set up error handler middleware
 app.use(function (err, req, res, next) {
