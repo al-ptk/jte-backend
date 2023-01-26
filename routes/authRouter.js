@@ -18,8 +18,10 @@ route.post('/sign-in', async (req, res, next) => {
     // Authenticate user
     const userAuthenticated = await bcrypt.compare(password, user.password);
     if (userAuthenticated) {
+      res.cookie('authenticated', 'true');
       res.send(`Welcome back, ${user.name}`);
     } else {
+      // TODO add status code
       res.send('Wrong password or email.');
     }
   } catch (err) {
@@ -41,7 +43,6 @@ route.post('/sign-up', async (req, res, next) => {
     // Refuse sign-up if email already registered
     const userExists = await User.findOne({ email }).exec();
     if (userExists) {
-      // TODO add status code
       return res.status(401).send('User already exists');
     }
 

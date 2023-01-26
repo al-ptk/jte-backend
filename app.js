@@ -1,6 +1,7 @@
 // Set up project
 require('dotenv').config();
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const app = express();
 
 // Set up mongoose
@@ -9,6 +10,7 @@ require('./mongoose-connection');
 // Set up middlewares
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cookieParser());
 
 // Import routers
 const authRouter = require('./routes/authRouter');
