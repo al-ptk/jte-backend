@@ -2,9 +2,9 @@
 require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const app = express();
 
-// Set up mongoose
+// Set up app configs
+const app = express();
 require('./mongoose-connection');
 
 // Set up middlewares

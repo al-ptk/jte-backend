@@ -3,7 +3,8 @@ const User = require('../models/User');
 
 /* Sign In Strategy
  *
- *
+ *  Middleware executed on the /sign-in route.
+ *  This is meant to retrieve a user's info on sign-in.
  */
 module.exports = new LocalStrategy(
   {
@@ -18,9 +19,15 @@ module.exports = new LocalStrategy(
         return done(null, false, { message: 'User not found' });
       }
 
-      const validate = await user.isValidPassword(password);
+      /* 
+       * This isValidPassword method is defined at the User model file.
+       * It is how the program compares passwords.
+       * Maybe the comparison should be done within the strategy definition?
+       * Co-locating important pieces together seems like a good idea.
+       */
+      const valid = await user.isValidPassword(password);
 
-      if (!validate) {
+      if (!valid) {
         return done(null, false, { message: 'Wrong Password' });
       }
 

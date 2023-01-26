@@ -1,32 +1,28 @@
 const route = require('express').Router();
-const User = require('../models/User');
-const bcrypt = require('bcryptjs');
+const passport = require('../authStrats/configStrategies');
+const jwt = require('jsonwebtoken');
 
 // Sign In Route
-route.post()
-// route.post('/sign-in', async (req, res, next) => {
-//   try {
-//     // Get login credentials
-//     const { email, password } = req.body;
-//     const user = await User.findOne({ email }).exec();
-//     // Reject emails not registered
-//     if (!user) {
-//       // TODO add status code
-//       return res.send('Wrong password or email.');
-//     }
-//     // Authenticate user
-//     const userAuthenticated = await bcrypt.compare(password, user.password);
-//     if (userAuthenticated) {
-//       res.cookie('authenticated', 'true');
-//       res.send(`Welcome back, ${user.name}`);
-//     } else {
-//       // TODO add status code
-//       res.send('Wrong password or email.');
-//     }
-//   } catch (err) {
-//     return next(err);
-//   }
-// });
+route.post('/sign-in', async (req, res, next) => {
+  // On valid sign-in, send JWT
+  passport.authenticate('sign-in', async (err, user, info) => {
+    try {
+      if (err || !user) {
+        const error = new Error('An error occurred.');
+        return next(error);
+      }
+
+      req.login(user, { session: false }, async (error) => {
+        if (error) return next(error);
+        const body = { _id: user._id, name: user.name };
+        const token = jwt.sign({ user: body }, process.env.JWT_KEY);
+        return res.json({ body, token });
+      });
+    } catch (error) {
+      return next(error);
+    }
+  })(req, res, next);
+});
 
 // Sign Up Route
 // route.post('/sign-up', async (req, res, next) => {

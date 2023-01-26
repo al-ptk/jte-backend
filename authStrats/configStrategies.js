@@ -1,9 +1,9 @@
 const passport = require('passport');
 
 // Import the strategies
-const signInStrat = require('./sign-in');
-const signUpStrat = require('./sign-up');
-const validateJwtStrat = require('./validate-jwt');
+const signInStrat = require('./signInStrat');
+const signUpStrat = require('./signUpStrat');
+const validateJwtStrat = require('./validateJwtStrat');
 
 // Config the strategies
 passport.use('sign-in', signInStrat);
