@@ -1,14 +1,9 @@
 const route = require('express').Router();
+const passport = require('../authStrats/configStrategies');
 
 // Middleware to authenticate users
-route.use((req, res, next) => {
-  const isUserAuthenticated = req.cookies['authenticated'] === 'true';
-  if (isUserAuthenticated) {
-    return next();
-  } else {
-    return res.sendStatus(401);
-  }
-});
+// route.use(passport.authenticate('validate-jwt', { session: false }));
+route.use(passport.authenticate('validate-jwt', { session: false }));
 
 // Routes for managing projects
 route.get('/projects', mockFunction);
