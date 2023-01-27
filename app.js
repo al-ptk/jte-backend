@@ -2,6 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 // Set up app configs
 const app = express();
@@ -11,6 +12,7 @@ require('./mongoose-connection');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 
 // Import routers
 const authRouter = require('./routes/authRouter');
