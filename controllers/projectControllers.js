@@ -1,36 +1,7 @@
 const Project = require('../models/Project');
 const User = require('../models/User');
 
-exports.setTable = async function (req, res, next) {
-  try {
-    const projectData = req.body.table;
-    const project = new Project(projectData);
-    await project.save();
-    res.sendStatus(200);
-  } catch (error) {
-    return next(error);
-  }
-};
-
-exports.getTable = async function (req, res, next) {
-  try {
-    const projectId = req.body.projectId;
-    const project = await Project.findById(projectId).exec();
-    res.status(200).json(project);
-  } catch (error) {
-    return next(error);
-  }
-};
-
-exports.deleteTable = async function (req, res, next) {
-  try {
-    const projectId = req.body.projectId;
-    await Project.findByIdAndDelete(projectId).exec();
-    res.sendStatus(200);
-  } catch (error) {
-    return next(error);
-  }
-};
+// Controllers that don't require table id
 
 exports.getAllTables = async function (req, res, next) {
   try {
@@ -56,6 +27,50 @@ exports.newTable = async function (req, res, next) {
       createdAt: new Date(),
     });
     res.json({ message: 'Project created' });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+// Controllers that require table id
+
+exports.getTable = async function (req, res, next) {
+  try {
+    const projectId = req.params.projectId;
+    const project = await Project.findById(projectId).exec();
+    if (!project) {
+      return res.status(404).json({ message: 'No project found' });
+    }
+    res.status(200).json(project);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+exports.setTable = async function (req, res, next) {
+  try {
+    const project = await Project.findByIdAndUpdate(
+      req.params.projectId,
+      req.body.table,
+      { new: true }
+    );
+    if (!project) {
+      return res.status(404).json({ message: 'No project found' });
+    }
+    res.status(200).json(project);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+exports.deleteTable = async function (req, res, next) {
+  try {
+    const projectId = req.params.projectId;
+    const project = await Project.findByIdAndDelete(projectId).exec();
+    if (!project) {
+      return res.status(404).json({ message: 'No project found' });
+    }
+    res.status(200).json({ message: 'Project deleted' });
   } catch (error) {
     return next(error);
   }
