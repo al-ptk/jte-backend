@@ -1,4 +1,5 @@
 const Project = require('../models/Project');
+const User = require('../models/User');
 
 exports.setTable = async function (req, res, next) {
   try {
@@ -31,13 +32,30 @@ exports.deleteTable = async function (req, res, next) {
   }
 };
 
-exports.getAllProjects = async function (req, res, next) {
+exports.getAllTables = async function (req, res, next) {
   try {
-    const ownerId = req.body.ownerId;
+    const ownerId = req.user._id;
     const projectList = await Project.find({ owner: ownerId })
       .select('title createdAt')
       .exec();
     res.status(200).json(projectList);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+exports.newTable = async function (req, res, next) {
+  try {
+    const user = await User.findById(req.user._id).exec();
+    const { instances, title, schema } = req.body.table;
+    Project.create({
+      instances: instances,
+      title: title,
+      propertiesSchema: schema, // "schema" collides with mongoose stuff, so I changed to propertiesSchema. Would propSchema be a better name?
+      owner: user.id,
+      createdAt: new Date(),
+    });
+    res.json({ message: 'Project created' });
   } catch (error) {
     return next(error);
   }

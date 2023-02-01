@@ -6,19 +6,14 @@ const projectControler = require('../controllers/projectControllers');
 route.use(passport.authenticate('validate-jwt', { session: false }));
 
 // Routes for managing projects
-route.get('/projects', projectControler.getAllProjects);
+route.get('/projects', projectControler.getAllTables);
 
-route.get('/project/:projectId', mockFunction);
+route.post('/projects', projectControler.newTable);
 
-route.put('/project/:projectId', (req, res) => {
-  console.log(req.body);
-  res.sendStatus(200);
-});
+route.get('/project/:projectId', projectControler.getTable);
 
-route.delete('/project/:projectId', mockFunction);
+route.put('/project/:projectId', projectControler.setTable);
+
+route.delete('/project/:projectId', projectControler.deleteTable);
 
 module.exports = route;
-
-function mockFunction(req, res, next) {
-  res.send('Hello');
-}

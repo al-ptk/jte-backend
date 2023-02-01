@@ -19,7 +19,7 @@ route.post('/sign-in', async (req, res, next) => {
         const body = { _id: user._id, name: user.name };
         const token = jwt.sign({ user: body }, process.env.JWT_KEY, {
           algorithm: 'HS256',
-          expiresIn: 60, // a minute, for now
+          expiresIn: 60 * 60 * 2, // a minute, for now
         });
         res.json({ token });
       });
