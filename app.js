@@ -7,12 +7,13 @@ const cors = require('cors');
 // Set up app configs
 const app = express();
 require('./mongoose-connection');
+const corsOptions = require('./corsConfig');
 
 // Set up middlewares
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Import routers
 const authRouter = require('./routes/authRouter');
